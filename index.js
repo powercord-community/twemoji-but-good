@@ -51,11 +51,18 @@ module.exports = class TwemojiButGood extends Plugin {
         if (!Array.isArray(ch)) {
           return res;
         }
-        res.props.children[1].props.children = ch.map(c =>
-          Array.isArray(c) && c[0] && c[0].props && this.wipe.map(w => w[0]).includes(c[0].props.text)
-            ? this.wipe.find(w => w[0] === c[0].props.text)[1]
-            : c
-        );
+        res.props.children[1].props.children = ch.map(c => {
+          const fn = (o) => typeof o === 'object' && o.props && this.wipe.map(w => w[0]).includes(o.props.text)
+            ? this.wipe.find(w => w[0] === o.props.text)[1]
+            : o;
+
+          if (Array.isArray(c)) {
+            return c.map(fn);
+          } else if (typeof c === 'object') {
+            return fn(c);
+          }
+          return c;
+        });
         return res;
       };
 
