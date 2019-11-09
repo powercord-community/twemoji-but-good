@@ -1,0 +1,7 @@
+{
+  "name": "Twemoji but good",
+  "version": "1.0.0",
+  "description": "Brings back old eyes and gun emojis from earlier versions of Twemoji, and removes tm emoji to bring back the good old tm char.",
+  "author": "Bowser65",
+  "license": "AGPL-3.0"
+}
