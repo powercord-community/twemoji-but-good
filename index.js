@@ -63,6 +63,5 @@ module.exports = class TwemojiButGood extends Plugin {
   pluginWillUnload () {
     uninject('twemojibg-replace');
     uninject('twemojibg-disabled');
-    uninject('twemojibg-disabled-but-for-retards');
   }
 };
