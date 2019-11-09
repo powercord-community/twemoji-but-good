@@ -48,6 +48,9 @@ module.exports = class TwemojiButGood extends Plugin {
       res.props.children = (data) => {
         const res = fn(data);
         const ch = res.props.children[1].props.children;
+        if (!Array.isArray(ch)) {
+          return res;
+        }
         res.props.children[1].props.children = ch.map(c =>
           Array.isArray(c) && c[0] && c[0].props && this.wipe.map(w => w[0]).includes(c[0].props.text)
             ? this.wipe.find(w => w[0] === c[0].props.text)[1]
