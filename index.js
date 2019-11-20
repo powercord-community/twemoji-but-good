@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const { getModule, getModuleByDisplayName } = require('powercord/webpack');
+const { getModule } = require('powercord/webpack');
 const { inject, uninject } = require('powercord/injector');
 const { Plugin } = require('powercord/entities');
 
@@ -28,11 +28,6 @@ module.exports = class TwemojiButGood extends Plugin {
       [ '4c5a77a89716352686f590a6f014770c', 'ccf4c733929efd9762ab02cd65175377' ],
       [ 'fd0dd759c1ed1e0a044fa6882e95fd02', '3071dbc60204c84ca0cf423b8b08a204' ],
       [ '464b4c2745e1dda6a86028d09bb8bbec', 'b6f700d4bc253abdb5ad576917b756d8' ]
-    ];
-    this.wipe = [
-      [ ':tm:', '™️' ],
-      [ ':copyright:', '©️' ],
-      [ ':registered:', '®️' ]
     ];
     this.hearts = [
       '0483f2b648dcc986d01385062052ae1c', '6d91de9b1030808264973b7cfb2d0a08', '46dc70e2608d986da6de64c6ba5a59da',
@@ -51,37 +46,9 @@ module.exports = class TwemojiButGood extends Plugin {
       }
       return res;
     });
-
-    const MessageContent = await getModuleByDisplayName('MessageContent');
-    inject('twemojibg-disabled', MessageContent.prototype, 'render', (args, res) => {
-      const fn = res.props.children;
-      res.props.children = (data) => {
-        const res = fn(data);
-        const ch = res.props.children[1].props.children;
-        if (!Array.isArray(ch)) {
-          return res;
-        }
-        res.props.children[1].props.children = ch.map(c => {
-          const fn = (o) => typeof o === 'object' && o.props && this.wipe.map(w => w[0]).includes(o.props.text)
-            ? this.wipe.find(w => w[0] === o.props.text)[1]
-            : o;
-
-          if (Array.isArray(c)) {
-            return c.map(fn);
-          } else if (typeof c === 'object') {
-            return fn(c);
-          }
-          return c;
-        });
-        return res;
-      };
-
-      return res;
-    });
   }
 
   pluginWillUnload () {
     uninject('twemojibg-replace');
-    uninject('twemojibg-disabled');
   }
 };
